@@ -53,7 +53,6 @@ for sub in range(1,30):
 all_cued = np.array(all_cued)
 all_uncued = np.array(all_uncued)
 
-
 subjects1 = np.arange(5,len(all_cued),1)
 trials1 = np.arange(300,980,980//20)
 T = np.zeros((2,len(trials1),len(subjects1)))
@@ -125,6 +124,9 @@ for sub in range(1,20):
 
 all_early = np.array(all_early)
 all_late = np.array(all_late)
+
+all_early_ori = all_early.copy()
+all_late_ori = all_late.copy()
 
 
 subjects = range(5,39,1)
@@ -225,8 +227,8 @@ all_early_combined = []
 all_late_combined = []
 
 for i in range(0,38,2):
-    all_early_combined.append(list(all_early[i]) + list(all_early[i+1]))
-    all_late_combined.append(list(all_late[i]) + list(all_late[i+1]))
+    all_early_combined.append(list(all_early_ori[i]) + list(all_early_ori[i+1]))
+    all_late_combined.append(list(all_late_ori[i]) + list(all_late_ori[i+1]))
 
 
 early = np.array([np.mean(l) for l in all_early_combined])
