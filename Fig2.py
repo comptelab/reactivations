@@ -16,8 +16,8 @@ sns.set_context("talk", font_scale=0.8)
 sns.set_style({"ytick.direction": "in"})
 sns.set_style({"xtick.direction": "in"})
 
-root_dir = "/Users/jbarbosa/Dropbox/Neuro/papers/Reactivation/Dynamic_hidden_states/scripts/decoders_smoothed_EEG/"
-root_dir_alpha= "../baseline_decoders/single_trials2017/exp1/alpha_"
+root_dir = "decoders/single_trials/erp/"
+root_dir_alpha = "decoders/single_trials/alpha/exp1/alpha_"
 
 nboots = 5000
 
@@ -72,7 +72,8 @@ all_cued_alpha = np.array(all_cued_alpha)
 time = np.linspace(-0.1,1.1980,650)
 imp_i = 650
 
-root_dir_alpha= "../baseline_decoders/single_trials2017/alpha_"
+
+root_dir_alpha = "decoders/single_trials/alpha/exp2/alpha_"
 
 data = loadmat(root_dir + "early_late_smoothed_2factor_single_trials.mat")
 dec_early1_sub = data['dec_early1_sub'][0]
@@ -261,26 +262,3 @@ for i in range(4):
     # if i == 0: plt.ylabel("erp decoding\nnumber of trials")
     # plt.tick_params(left = False,bottom = False)
     # plt.yticks(range(trials[0],trials[-1],200))
-
-figure()
-r = []
-r_alpha = []
-colors = ["blue", "darkred", "darkgreen", "orange"]
-for i in range(4):
-    d = np.diagonal(Ts[i])
-    r.append(stats.linregress(np.arange(len(d)),d))
-    
-    # d = np.diagonal(Ts_alpha[i])
-    # r_alpha.append(stats.linregress(np.arange(len(d)),d))
-
-subplot(2,1,1)
-[plt.plot(np.diagonal(t),label="r2=%.3f,p=%.1e" %(r[i][0],r[i][4])) for i,t in enumerate(Ts)]
-plt.legend()
-plt.ylabel("t-value")
-plt.xlabel("diagonal bin")
-
-# subplot(2,1,2)
-# [plt.plot(np.diagonal(t),"--",label="r2=%.3f,p=%.1e" %(r_alpha[i][0],r_alpha[i][4])) for i,t in enumerate(Ts_alpha)]
-# plt.legend()
-# plt.ylabel("t-value")
-# plt.xlabel("diagonal bin")

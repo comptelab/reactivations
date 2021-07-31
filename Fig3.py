@@ -26,7 +26,7 @@ def get_fold(session,n):
     return folds1,folds2
 
 #### load data
-root_dir = "/Users/jbarbosa/Dropbox/Neuro/papers/Reactivation/Dynamic_hidden_states/scripts/decoders_smoothed_EEG/"
+root_dir = "decoders/single_trials/erp/"
 
 data = loadmat(root_dir + "early_late_smoothed_2factor_single_trials.mat")
 dec_late1_sub = data['dec_late1_sub'][0]

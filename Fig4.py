@@ -27,8 +27,9 @@ sns.set_style({"xtick.direction": "in"})
 ## WOLFF DATA
 
 imponset =0.25 + 0.95; 
-all_files = sort(glob.glob("../Dynamic_hidden_states/Data/concat/exp2_d1*.mat"))
-all_files2 = sort(glob.glob("../Dynamic_hidden_states/Data/concat/exp2_d2*.mat"))
+
+all_files = sort(glob.glob("Data/Wolff2017_concat/exp2_d1*.mat"))
+all_files2 = sort(glob.glob("Data/Wolff2017_concat/exp2_d2*.mat"))
 f=io.loadmat(all_files[0])
 
 time = f["data1"]["time"][0][0][0]
@@ -64,12 +65,9 @@ ps_st = array([ttest_1samp(v,0)[1] for v in s_vars_dt_rel])
 
 
 # Wolff 2015 data
-
-all_files = glob.glob("../Wolff2015/eeg_*.mat")
-
+all_files = glob.glob("Data/Wolff2015/original/eeg_*.mat")
 f=io.loadmat(all_files[0])
-
-time2015 = io.loadmat("../Wolff2015/time.mat")['t'][0]
+time2015 = io.loadmat("Data/Wolff2015/time.mat")['t'][0]
 
 s_vars2015 = []
 for file in all_files:
@@ -94,7 +92,7 @@ high2015 = m_var2015+2*stderr2015
 ps_st2015 = array([ttest_1samp(v,0)[1] for v in s_vars_2015_rel])
 
 ## ROSE DATA
-file_path = "../Rose et al/TMS_Data/Exp2"
+file_path = "Data/Rose et al/TMS_Data/Exp2"
 all_files = glob.glob(file_path+"/*.mat")
 #subjs =  unique([int(a.split("/")[4].split("_")[0]) for a in all_files])
 subjs = [104, 105, 106, 107, 108, 111]
@@ -145,12 +143,13 @@ boot = [(std(m_fr[i],0)/mean(m_fr[i],0) - baseline) for i in idx]
 #### var split
 
 # wolff 2015 trial by trial analyses
-root_dir = "../Wolff2015/Data/trial_by_trial/"
+root_dir = "Data/Wolff2015/"
 
-time2015 = io.loadmat("../Wolff2015/time.mat")['t'][0]
+time2015 = io.loadmat("Data/Wolff2015/time.mat")['t'][0]
 
 eegs_imp=[]
 
+# select decoding peak, but allow for a small jitter of +- 6bins
 T = 6
 idx_imp=range(147-T,147+T)
 
