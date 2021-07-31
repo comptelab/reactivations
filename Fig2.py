@@ -17,7 +17,6 @@ sns.set_style({"ytick.direction": "in"})
 sns.set_style({"xtick.direction": "in"})
 
 root_dir = "decoders/single_trials/erp/"
-root_dir_alpha = "decoders/single_trials/alpha/exp1/alpha_"
 
 nboots = 5000
 
@@ -33,13 +32,10 @@ dec_uncued = data["dec_uncued"][:,0]
 all_uncued= []
 all_cued= []
 
-all_cued_alpha = []
-all_uncued_alpha= []
-
 
 for i,d in enumerate(dec_uncued):
 
-    if i == 0: continue ## missing alpha decoder for subject #1 - correct this
+    #if i == 0: continue ## missing alpha decoder for subject #1 - correct this
 
     # load ERP decoders
     s = np.mean(d[:,imp_i-100:imp_i],-1)
@@ -49,22 +45,8 @@ for i,d in enumerate(dec_uncued):
     s = np.mean(d[:,imp_i-100:imp_i],-1)
     all_cued.append(s)
 
-    # load alpha decoders
-    files=glob.glob(root_dir_alpha+"cued_exp1_single%i.mat" % (i))[0]
-    dec_cued_alpha=loadmat(files)["cued_trials"]
-    dec_cued_alpha = np.mean(dec_cued_alpha[:,800:imp_i],-1)
-    all_cued_alpha.append(dec_cued_alpha)
-
-    files=glob.glob(root_dir_alpha+"uncued_exp1_single%i.mat" % (i))[0]
-    dec_uncued_alpha=loadmat(files)["uncued_trials"]
-    dec_uncued_alpha =  np.mean(dec_uncued_alpha[:,800:imp_i],-1)
-    all_uncued_alpha.append(dec_uncued_alpha)
-
 all_uncued = np.array(all_uncued)
 all_cued = np.array(all_cued)
-
-all_uncued_alpha = np.array(all_uncued_alpha)
-all_cued_alpha = np.array(all_cued_alpha)
 
 
 ### EXPERIMENT 2
@@ -72,8 +54,6 @@ all_cued_alpha = np.array(all_cued_alpha)
 time = np.linspace(-0.1,1.1980,650)
 imp_i = 650
 
-
-root_dir_alpha = "decoders/single_trials/alpha/exp2/alpha_"
 
 data = loadmat(root_dir + "early_late_smoothed_2factor_single_trials.mat")
 dec_early1_sub = data['dec_early1_sub'][0]
@@ -84,11 +64,8 @@ dec_late2_sub = data['dec_late2_sub'][0]
 all_early = []
 all_late= []
 
-all_early_alpha = []
-all_late_alpha = []
-
 for i,d in enumerate(dec_early2_sub):
-    if i == 0: continue ## missing alpha decoder for subject #1 - correct this
+    #if i == 0: continue ## missing alpha decoder for subject #1 - correct this
     # load ERP decoders
     s1= np.mean(dec_early1_sub[i][:,imp_i-100:imp_i],1)
     s2 = np.mean(dec_early2_sub[i][:,imp_i-100:imp_i],1)
@@ -98,36 +75,15 @@ for i,d in enumerate(dec_early2_sub):
     s2 = np.mean(dec_late2_sub[i][:,imp_i-100:imp_i],1)
     all_late.append(s1); all_late.append(s2)
 
-
-    # load alpha
-    for session in [1,2]:
-        # load single-trial decoders, early
-        files=glob.glob(root_dir_alpha+"early_d_%i_single_dec_%i.mat" % (session, i))[0]
-        dec_early=loadmat(files)["dec_early%i" % session]
-        dec_early = np.mean(dec_early[:,400:imp_i],-1)
-        all_early_alpha.append(dec_early)
-
-        # load single-trial decoders, late
-        files=glob.glob(root_dir_alpha+"late_d_%i_single_dec_%i.mat" % (session, i))[0]
-        dec_late=loadmat(files)["dec_late%i" % session]
-        dec_late =  np.mean(dec_late[:,400:imp_i],-1)
-        all_late_alpha.append(dec_late)
-
 all_early = np.array(all_early)
 all_late = np.array(all_late)
 
-all_early_alpha = np.array(all_early_alpha)
-all_late_alpha = np.array(all_late_alpha)
-
 ### resampling
 all_decs = [[all_early,all_late],[all_cued,all_uncued]]
-all_decs_alpha = [[all_early_alpha,all_late_alpha],[all_cued_alpha,all_uncued_alpha]]
 
 Ts = []
 Ps = []
 
-Ts_alpha = []
-Ps_alpha = []
 
 subjects_range = []
 trials_range = []
@@ -135,7 +91,6 @@ trials_range = []
 for i in range(2):
 
     decs = all_decs[i]
-    decs_alpha = all_decs_alpha[i]
 
     subjects = np.arange(1,len(decs[0]))
     max_trials =max([len(a) for a in decs[0]])
@@ -147,7 +102,6 @@ for i in range(2):
 
     idx_subjects = list(range(subjects[-1]))
     T = np.zeros((2,len(trials),len(subjects)))
-    T_alpha = np.zeros((2,len(trials),len(subjects)))
 
     for nt,n_trials in enumerate(trials):
         print(nt)
@@ -175,64 +129,34 @@ for i in range(2):
                 t = ttest_1samp(c2_trials,0)[0]
                 T[1,nt,ns] += t/nboots
 
-        ##### alpha sampling
-                # c1_subjects = decs_alpha[0][idx_subjects[:n_subjects]]
-                # c2_subjects = decs_alpha[1][idx_subjects[:n_subjects]]
-
-                # # shuffle across trials
-                # [np.random.shuffle(c) for c in c1_subjects]
-                # [np.random.shuffle(c) for c in c2_subjects]
-                
-                # c1_trials = np.concatenate([l[:min(n_trials,len(l))]for l in c1_subjects])
-                # c2_trials = np.concatenate([l[:min(n_trials,len(l))] for l in c2_subjects])
-
-                # t = ttest_1samp(c1_trials,0)[0]
-                # T_alpha[0,nt,ns] += t/nboots
-            
-                # t = ttest_1samp(c2_trials,0)[0]
-                # T_alpha[1,nt,ns] += t/nboots
 
     T[0] = gaussian_filter(T[0], sigma=(2, 2))
     T[1] = gaussian_filter(T[1], sigma=(2, 2))
 
-
-    # T_alpha[0] = gaussian_filter(T_alpha[0], sigma=(2, 2))
-    # T_alpha[1] = gaussian_filter(T_alpha[1], sigma=(2, 2))
-
     # convert t values to p values
     P = np.zeros_like(T)
-    P_alpha = np.zeros_like(T)
 
     for nt,n_trials in enumerate(trials):
         for ns,n_subjects in enumerate(subjects):
             P[0,nt,ns]=stats.t.sf(np.abs(T[0,nt,ns]), df=n_subjects*n_trials)/2
             P[1,nt,ns]=stats.t.sf(np.abs(T[1,nt,ns]), df=n_subjects*n_trials)/2
 
-            # P_alpha[0,nt,ns]=stats.t.sf(np.abs(T_alpha[0,nt,ns]), df=n_subjects*n_trials)
-            # P_alpha[1,nt,ns]=stats.t.sf(np.abs(T_alpha[1,nt,ns]), df=n_subjects*n_trials)
-
-
     Ts.append(T[0]); Ts.append(T[1])
     Ps.append(P[0]); Ps.append(P[1])
 
-    # Ts_alpha.append(T_alpha[0]); Ts_alpha.append(T_alpha[1])
-    # Ps_alpha.append(P_alpha[0]); Ps_alpha.append(P_alpha[1])
-
-
 
 ### plotting
-plt.figure(figsize=(11,4))
+plt.figure(figsize=(11,2))
 
 for i in range(4):
 
     subjects = subjects_range[i]
     trials = trials_range[i]
 
-## plot ERP
     T = Ts[i]
     P = Ps[i]
 
-    plt.subplot(2,4,i+1)
+    plt.subplot(1,4,i+1)
     plt.imshow(T,aspect="auto", 
                 vmin=-1.5, vmax=5,origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap=sns.color_palette("magma", as_cmap=True))
             
@@ -244,21 +168,3 @@ for i in range(4):
     if i == 0: plt.ylabel("erp decoding\nnumber of trials")
     plt.tick_params(left = False,bottom = False)
     plt.yticks(range(trials[0],trials[-1],200))
-
-
-## plot alpha
-    # T = Ts_alpha[i]
-    # P = Ps_alpha[i]
-
-    # plt.subplot(2,4,4+i+1)
-    # plt.imshow(T,aspect="auto", 
-    #             vmin=-1.5, vmax=5,origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap=sns.color_palette("magma", as_cmap=True))
-            
-    # cbar = plt.colorbar()           
-    # cbar.set_label('t-value', rotation=270)  
-    # # cbar.set_ticks([-1,0,1,2,3])
-    # contours = plt.contour(subjects, trials, P, 8, colors='white',linewidths=1)
-    # plt.clabel(contours, inline=True, fontsize=10)
-    # if i == 0: plt.ylabel("erp decoding\nnumber of trials")
-    # plt.tick_params(left = False,bottom = False)
-    # plt.yticks(range(trials[0],trials[-1],200))
