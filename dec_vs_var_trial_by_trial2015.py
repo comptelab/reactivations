@@ -7,9 +7,9 @@ import sys
 from scipy.stats import *
 import seaborn as sns
 from scikits import bootstrap
-sys.path.insert(0, '/home/joaob/Dropbox/Neuro/mypytools/')
-sys.path.insert(0, '/Users/jbarbosa/Dropbox/Neuro/mypytools/')
-from helpers import *
+# sys.path.insert(0, '/home/joaob/Dropbox/Neuro/mypytools/')
+# sys.path.insert(0, '/Users/jbarbosa/Dropbox/Neuro/mypytools/')
+# from helpers import *
 from scipy.signal import detrend
 #import mat73
 from scipy.io import loadmat
@@ -23,10 +23,10 @@ sns.set_style({"xtick.direction": "in"})
 
 
 # wolff 2015 trial by trial analyses
-root_dir = "Wolff2015/Data/trial_by_trial/"
+root_dir = "../Wolff2015/Data/trial_by_trial/"
 
-time2015 = io.loadmat("Wolff2015/time.mat")['t'][0]
-time2015_delay = io.loadmat("Wolff2015/time_delay.mat")['time'][0]
+time2015 = io.loadmat("../Wolff2015/time.mat")['t'][0]
+time2015_delay = io.loadmat("../Wolff2015/time_delay.mat")['time'][0]
 
 decs_imp = []
 eegs_imp=[]
@@ -34,7 +34,7 @@ decs_delay = []
 eegs_delay=[]
 high_low=[]
 
-T= 6
+T=6
 idx_imp=range(147-T,147+T)
 
 idx_delay=range(75,155)

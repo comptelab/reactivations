@@ -50,22 +50,18 @@ all_corrs = []
 all_ve = []
 all_vl = []
 all_shuffle_corrs = []
+
 for f,file in enumerate(all_files):
     print(f)
 
-    #stims 
+    #laod stims 
     f1=io.loadmat(all_files1_stim[f])
     f2=io.loadmat(all_files2_stim[f])
 
     stims1 = io.loadmat(all_files1_stim[f])["mem_angles1"]
     stims2 = io.loadmat(all_files2_stim[f])["mem_angles2"]
 
-    stims = np.concatenate((stims1,stims2))
-    stims = stims2
-    _,_,idx1 = binned_statistic(stims[:,0],stims[:,1],bins=8)
-    _,_,idx2 = binned_statistic(stims[:,1],stims[:,1],bins=8)
-
-    # ERP
+    # load ERP
     f1=io.loadmat(file)
     f2=io.loadmat(all_files2[f])
     data1_alpha = f1["data1"]["trial"][0][0]
@@ -74,19 +70,27 @@ for f,file in enumerate(all_files):
     data2_alpha = f2["data2"]["trial"][0][0]
     data2_alpha = data2_alpha - np.mean(data2_alpha,1)[:,None,:]
 
-    #alpha
-    # f1=io.loadmat(all_files1_alpha[f])
-    # f2=io.loadmat(all_files2_alpha[f])
-    # data1_alpha = f1["pow1"] 
-    # data1_alpha -= np.mean(data1_alpha,1)[:,None,:]
+    #load alpha - comment to analyse ERPs instead
+    f1=io.loadmat(all_files1_alpha[f])
+    f2=io.loadmat(all_files2_alpha[f])
+    data1_alpha = f1["pow1"] 
+    data1_alpha -= np.mean(data1_alpha,1)[:,None,:]
 
-    # data2_alpha = f2["pow2"]
-    # data2_alpha -= np.mean(data2_alpha,1)[:,None,:]
+    data2_alpha = f2["pow2"]
+    data2_alpha -= np.mean(data2_alpha,1)[:,None,:]
 
+    # session to use
     d1 = np.mean(data1_alpha[:,:,(time<1.2) & (time>0.7)],-1)
     d2 = np.mean(data2_alpha[:,:,(time<1.2) & (time>0.7)],-1)
+
     data_alpha = np.concatenate((d1,d2))
-    data_alpha = d2
+    data_alpha = d1
+
+    stims = np.concatenate((stims1,stims2))
+    stims = stims1
+    _,_,idx1 = binned_statistic(stims[:,0],stims[:,1],bins=8)
+    _,_,idx2 = binned_statistic(stims[:,1],stims[:,1],bins=8)
+
     def one_corr():
         avg_alpha_early = []
         avg_alpha_late = []
@@ -96,10 +100,13 @@ for f,file in enumerate(all_files):
             avg_alpha_early.append(avg1)
             avg_alpha_late.append(avg2)
 
-        early = np.array(avg_alpha_early)
-        late = np.array(avg_alpha_late)
+        early = np.array(avg_alpha_early - np.mean(avg_alpha_early,0))
+        late = np.array(avg_alpha_late- np.mean(avg_alpha_late,0))
 
+        # r_early = [roll(early[:,i],argmax(early[:,i])+4) for i in range(17)]
+        # r_late = [roll(late[:,i],argmax(early[:,i])+4) for i in range(17)]
 
+        #return early, late
         corr_tuning = [spearmanr(early[:,i],late[:,i]) for i in range(17)]
         corr_elec = spearmanr(np.std(avg_alpha_early,0),np.std(avg_alpha_late,0))[0]
         
@@ -116,7 +123,8 @@ for f,file in enumerate(all_files):
     all_shuffle_corrs.append(shuffle_corrs)
 
 
-    
+
+
 z_sub = (np.array(all_corrs)[:,0] - np.mean(np.array(all_shuffle_corrs)[:,:,0],1)) / np.std(np.array(all_shuffle_corrs)[:,:,0],1)
 print("tuning ",ttest_1samp(z_sub,0))
 
@@ -124,3 +132,9 @@ print("tuning ",ttest_1samp(z_sub,0))
 z_sub = (np.array(all_corrs)[:,1] - np.mean(np.array(all_shuffle_corrs)[:,:,1],1)) / np.std(np.array(all_shuffle_corrs)[:,:,1],1)
 print("electrodes ",ttest_1samp(z_sub,0))
 
+
+plt.subplot(2,1,1)
+plt.imshow(np.mean(all_corrs,0)[0].T)
+
+plt.subplot(2,1,2)
+plt.imshow(np.mean(all_corrs,0)[1].T)

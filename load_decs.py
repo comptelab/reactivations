@@ -11,6 +11,13 @@ from scipy.ndimage import gaussian_filter
 #import pylustrator 
 #pylustrator.start()
 
+import rpy2.robjects as robjects
+from rpy2.robjects import r, pandas2ri
+from rpy2.robjects.packages import importr
+pandas2ri.activate()
+BayesFactor = importr('BayesFactor')
+
+
 sns.set_style("ticks")
 sns.set_context("talk", font_scale=1.5)
 sns.set_style({"ytick.direction": "in"})
@@ -85,8 +92,6 @@ sem_alpha_uncued=array([percentile(alpha,[32/2,100-32/2]) for alpha in auncued.T
 
 sem_erp_cued=array([percentile(erp,[32/2,100-32/2]) for erp in ecued.T])
 sem_erp_uncued=array([percentile(erp,[32/2,100-32/2]) for erp in euncued.T])
-
-
 
 
 ### smoothing and CI for EXP 2
@@ -261,4 +266,5 @@ plt.tight_layout()
 savefig("figures/fig4.png",dpi=300)
 savefig("figures/fig4.svg",dpi=300)
 plt.show()
+
 

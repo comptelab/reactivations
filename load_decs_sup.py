@@ -11,6 +11,11 @@ from scipy.ndimage import gaussian_filter
 #import pylustrator 
 #pylustrator.start()
 
+import rpy2.robjects as robjects
+from rpy2.robjects import r, pandas2ri
+from rpy2.robjects.packages import importr
+pandas2ri.activate()
+BayesFactor = importr('BayesFactor')
 
 imp_on = 0.250+0.95
 
@@ -20,6 +25,15 @@ sns.set_style({"ytick.direction": "in"})
 sns.set_style({"xtick.direction": "in"})
 
 find = lambda x: where(x)[0]
+
+def get_BF(decs):
+	BF = []
+	for z in decs:
+		robjects.globalenv["z"] = z
+		bf = 1/np.exp(r('ttestBF(z)[1]@bayesFactor$bf'))
+		BF.append(bf[0])
+	BF = np.array(BF)
+	return BF
 
 def color_legend(colors,loc="best",ncol=1,fontsize=15):
 	l=plt.legend(frameon=False, loc=loc, ncol=ncol,fontsize=fontsize)
@@ -76,8 +90,24 @@ idx=bootstrap.bootstrap_indexes(erp_late,n_samples=1000)
 res = Parallel(n_jobs=num_cores)(delayed(smooth_i)(i,data) for i in idx)
 mres = mean(res,2)
 
+# BF_data = []
 
-eearly,elate,aearly,alate,bearly,blate,tearly,tlate,bbearly,bblate = transpose(mres,[1,0,2])
+# for i,d in enumerate(data):
+# 	print(i)
+# 	BF_data.append(get_BF(d.T))
+
+# eearly,elate,aearly,alate,bearly,blate,tearly,tlate,bbearly,bblate = transpose(mres,[1,0,2])
+
+# w = 250
+# bf_elate2 = bf_elate.copy()
+# for i in range(len(time)):
+# 	bf_elate2[i] = np.mean(bf_elate[i:i+w])
+
+
+# plt.plot(time,np.ones_like(time)*3)
+# plt.plot(time,bf_elate,"blue",label="unattended")
+# plt.plot(time,bf_eearly,"red",label="attended")
+# plt.legend()
 
 
 ci_erp_early=array([percentile(erp,[2.5,97.5]) for erp in eearly.T])
