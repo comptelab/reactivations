@@ -2,7 +2,7 @@
 
 Code to replicate figures in "Pinging reveals active, not silent, working memories", Joao Barbosa, Diego Lozano-Soldevilla & Albert Compte
 
-IMPORTANT: I did not collect the data analyzed in this paper. Consider downloading and citing the original datasets from the original publications.
+IMPORTANT: We did not collect the data analyzed in this paper. Consider downloading and citing the original datasets from the original publications.
 
 [Wolff et al 2015](https://www.frontiersin.org/articles/10.3389/fnsys.2015.00123/full)  
 [Wolff et al 2017](https://www.nature.com/articles/nn.4546)
