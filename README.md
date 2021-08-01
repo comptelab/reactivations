@@ -13,4 +13,7 @@ Single-trial [decoding accuracies](https://www.dropbox.com/sh/4j0wkxqvmazk0xn/AA
 If you need to use this slighly modified data (mostly concatenated), **you must cite the original studies anyway.**
 
 
+The folder decoders/matlab_code contain the original matlab code of [Wolff et al 2017](https://www.nature.com/articles/nn.4546)
+ with minor modifications, most notably the conversion to alpha power using fieldtrip.
+
 Any questions should be directed to Joao Barbosa, palerma@gmail.com
