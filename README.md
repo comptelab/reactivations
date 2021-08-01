@@ -8,7 +8,7 @@ IMPORTANT: We did not collect the data analyzed in this paper. Consider download
 [Wolff et al 2017](https://www.nature.com/articles/nn.4546)
 
 
-Single-trial decoding accuracies (used in Fig 2 and 3) and Data (used in Fig 4) need to be downloaded separatedly for the scripts to run properly. Single-trial [decoding accuracies](https://www.dropbox.com/sh/4j0wkxqvmazk0xn/AABFMWk2Ef_O9BKLcAGjisGra?dl=0) and [Data](https://www.dropbox.com/sh/hrjhfjivu5wkbre/AAD-8rNc-Vj2YL-3GsYB2Ui2a?dl=0) modified to work with our scripts can be downloaded. 
+Single-trial [decoding accuracies](https://www.dropbox.com/sh/4j0wkxqvmazk0xn/AABFMWk2Ef_O9BKLcAGjisGra?dl=0) (used in Fig 2 and 3) and [Data](https://www.dropbox.com/sh/hrjhfjivu5wkbre/AAD-8rNc-Vj2YL-3GsYB2Ui2a?dl=0) (used in Fig 4) need to be downloaded separatedly for the scripts to run properly. 
 
 If you need to use this slighly modified data (mostly concatenated), **you must cite the original studies anyway.**
 
