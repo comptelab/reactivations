@@ -93,7 +93,7 @@ for i in range(2):
     decs = all_decs[i]
 
     subjects = np.arange(1,len(decs[0]))
-    max_trials =max([len(a) for a in decs[0]])
+    max_trials =min([len(a) for a in decs[0]])
     trials = np.arange(5,max_trials,max_trials//30)
 
     ## added twice for easier plotting
@@ -102,6 +102,7 @@ for i in range(2):
 
     idx_subjects = list(range(subjects[-1]))
     T = np.zeros((2,len(trials),len(subjects)))
+    N = np.zeros((2,len(trials),len(subjects)))
 
     for nt,n_trials in enumerate(trials):
         print(nt)
@@ -138,8 +139,8 @@ for i in range(2):
 
     for nt,n_trials in enumerate(trials):
         for ns,n_subjects in enumerate(subjects):
-            P[0,nt,ns]=stats.t.sf(np.abs(T[0,nt,ns]), df=n_subjects*n_trials)/2
-            P[1,nt,ns]=stats.t.sf(np.abs(T[1,nt,ns]), df=n_subjects*n_trials)/2
+            P[0,nt,ns]=stats.t.sf(np.abs(T[0,nt,ns]), df=n_subjects*n_trials)
+            P[1,nt,ns]=stats.t.sf(np.abs(T[1,nt,ns]), df=n_subjects*n_trials)
 
     Ts.append(T[0]); Ts.append(T[1])
     Ps.append(P[0]); Ps.append(P[1])
@@ -158,7 +159,7 @@ for i in range(4):
 
     plt.subplot(1,4,i+1)
     plt.imshow(T,aspect="auto", 
-                vmin=-1.5, vmax=5,origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap=sns.color_palette("magma", as_cmap=True))
+                vmin=0, vmax=np.max(Ts[2]),origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap=sns.color_palette("magma", as_cmap=True))
             
     cbar = plt.colorbar()           
     cbar.set_label('t-value', rotation=270)  
@@ -168,3 +169,6 @@ for i in range(4):
     if i == 0: plt.ylabel("erp decoding\nnumber of trials")
     plt.tick_params(left = False,bottom = False)
     plt.yticks(range(trials[0],trials[-1],200))
+
+
+savefig("figures/fig2.svg")
