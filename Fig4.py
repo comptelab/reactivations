@@ -98,7 +98,9 @@ all_files = glob.glob(file_path+"/*.mat")
 subjs = [104, 105, 106, 107, 108, 111]
 
 all_vars = []
+all_subjs = []
 for sub in subjs:
+	all_data = []
 	files = glob.glob("%s/%s*.mat" % (file_path,sub))
 	s_vars = []
 	s_w_vars = []
@@ -108,6 +110,7 @@ for sub in subjs:
 		data = f["data"]
 		times = f["times"][0]
 		d=data[good_chan]
+		all_data.append(d)
 		m_sens = mean(d,0)
 		d = [d1-m_sens for d1 in d]
 		var = std(d,-1)**2
@@ -115,13 +118,23 @@ for sub in subjs:
 		norm_var = [(var[:,t] - baseline_tms) / baseline_tms * 100 for t in range(len(times))]
 		s_vars.append(mean(norm_var,1))
 	all_vars.append(mean(s_vars,0))
+	all_subjs.append(s_vars)
 
+
+# del(all_subjs[1][7])
+# del(all_subjs[1][2])
+# del(all_subjs[1][1])
+
+# del(all_subjs[2][6])
+# del(all_subjs[2][3])
+# del(all_subjs[2][1])
+
+all_vars = np.concatenate(all_subjs)
 ps_rose = array([ttest_1samp(v,0)[1] for v in array(all_vars).T])
 m_var =mean(all_vars,0)
 stderr = 2*std(all_vars,0)/sqrt(len(all_vars))
 low = m_var-stderr
 high = m_var+stderr
-
 
 
 m_fr = loadtxt("simulations_for_plot/wolff_sims_fr.txt")
@@ -205,7 +218,7 @@ title("Wolff et al (2017)\nWolff et al (2015)",pad=10)
 fill_between(time-imponset,low_st,high_st,alpha=0.5,color="gray")
 #plot(time-imponset,(array(s_vars_dt)),"k",alpha=0.15)
 plot(time-imponset,m_var_st,"gray",lw=2)
-plot(time-imponset,zeros(len(time)),"--",color="gray")
+plot(time-imponset,zeros(len(time)),"--",color="black")
 
 fill_between(time2015,low2015,high2015,alpha=0.5,color="black")
 plot(time2015, m_var2015, "black")
@@ -228,10 +241,10 @@ fill_between(times/1000,low,high,alpha=0.5,color="k")
 #plot(times/1000,(array(all_vars)).T,"k",alpha=0.2)
 plot(times/1000,m_var,"k",lw=2)
 plot(times/1000,zeros(len(times)),"k--")
-sig_bar(find(ps_rose<0.005),times/1000,[40*0.95,40],"k")
-ylim(-40,40)
-#ylabel("% of " r"$\Delta$" "variance")
-yticks([-40,-20,0,20,40])
+sig_bar(find(ps_rose<0.005),times/1000,[75*0.95,75],"k")
+ylim(-25,75)
+ylabel("% of " r"$\Delta$" "variance")
+yticks([-25,0,25,50,75])
 xlim(-0.2,0.5)
 xticks([0,0.5],[])
 

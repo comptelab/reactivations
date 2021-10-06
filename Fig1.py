@@ -71,11 +71,11 @@ mres = mean(res,2)
 ecued,euncued,acued,auncued = mres[:,0],mres[:,1],mres[:,2],mres[:,3]
 
 
-ci_alpha_cued=array([percentile(alpha,[2.5,97.5]) for alpha in acued.T])
-ci_alpha_uncued=array([percentile(alpha,[2.5,97.5]) for alpha in auncued.T])
+ci_alpha_cued=array([percentile(alpha,[5,95]) for alpha in acued.T])
+ci_alpha_uncued=array([percentile(alpha,[5,95]) for alpha in auncued.T])
 
-ci_erp_cued=array([percentile(erp,[2.5,97.5]) for erp in ecued.T])
-ci_erp_uncued=array([percentile(erp,[2.5,97.5]) for erp in euncued.T])
+ci_erp_cued=array([percentile(erp,[5,95]) for erp in ecued.T])
+ci_erp_uncued=array([percentile(erp,[5,95]) for erp in euncued.T])
 
 
 sem_alpha_cued=array([percentile(alpha,[32/2,100-32/2]) for alpha in acued.T])
@@ -93,11 +93,11 @@ mres = mean(res,2)
 eearly,elate,aearly,alate = mres[:,0],mres[:,1],mres[:,2],mres[:,3]
 
 
-ci_alpha_early=array([percentile(alpha,[2.5,97.5]) for alpha in aearly.T])
-ci_alpha_late=array([percentile(alpha,[2.5,97.5]) for alpha in alate.T])
+ci_alpha_early=array([percentile(alpha,[5,95]) for alpha in aearly.T])
+ci_alpha_late=array([percentile(alpha,[5,95]) for alpha in alate.T])
 
-ci_erp_early=array([percentile(erp,[2.5,97.5]) for erp in eearly.T])
-ci_erp_late=array([percentile(erp,[2.5,97.5]) for erp in elate.T])
+ci_erp_early=array([percentile(erp,[5,95]) for erp in eearly.T])
+ci_erp_late=array([percentile(erp,[5,95]) for erp in elate.T])
 
 
 sem_alpha_early=array([percentile(alpha,[32/2,100-32/2]) for alpha in aearly.T])
@@ -254,8 +254,8 @@ plt.fill_between([0.7,1.2],[-0.0001,-0.0001],[0,0],color="black",alpha=0.5)
 
 plt.tight_layout()
 
-savefig("figures/fig4.png",dpi=300)
-savefig("figures/fig4.svg",dpi=300)
+savefig("figures/fig1.png",dpi=300)
+savefig("figures/fig1.svg",dpi=300)
 plt.show()
 
 

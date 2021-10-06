@@ -81,6 +81,7 @@ all_late = np.array(all_late)
 ### resampling
 all_decs = [[all_early,all_late],[all_cued,all_uncued]]
 
+
 Ts = []
 Ps = []
 
@@ -93,6 +94,8 @@ for i in range(2):
     decs = all_decs[i]
 
     subjects = np.arange(1,len(decs[0]))
+
+    # pick the subject with the minimum number of trials to loop across
     max_trials =min([len(a) for a in decs[0]])
     trials = np.arange(5,max_trials,max_trials//30)
 
@@ -106,11 +109,10 @@ for i in range(2):
 
     for nt,n_trials in enumerate(trials):
         print(nt)
-        for _ in range(nboots):
-            np.random.shuffle(idx_subjects)
-            for ns,n_subjects in enumerate(subjects):
+        for ns,n_subjects in enumerate(subjects):
+            for _ in range(nboots):
+                np.random.shuffle(idx_subjects)
 
-        ##### erp sampling
                 # use random set of subjects
                 c1_subjects = decs[0][idx_subjects[:n_subjects]]
                 c2_subjects = decs[1][idx_subjects[:n_subjects]]
@@ -121,8 +123,13 @@ for i in range(2):
                 
                 # for each session, select the minimum between the max number of trials and 
                 # the session's number of trials. This makes sure we are including all trials in the analyses
-                c1_trials = np.concatenate([l[:min(n_trials,len(l))]for l in c1_subjects])
-                c2_trials = np.concatenate([l[:min(n_trials,len(l))] for l in c2_subjects])
+                # c1_trials = np.concatenate([l[:min(n_trials,len(l))]for l in c1_subjects])
+                # c2_trials = np.concatenate([l[:min(n_trials,len(l))] for l in c2_subjects])
+
+
+                c1_trials = np.concatenate([l[:n_trials]for l in c1_subjects])
+                c2_trials = np.concatenate([l[:n_trials] for l in c2_subjects])
+
 
                 t = ttest_1samp(c1_trials,0)[0]
                 T[0,nt,ns] += t/nboots
@@ -159,12 +166,12 @@ for i in range(4):
 
     plt.subplot(1,4,i+1)
     plt.imshow(T,aspect="auto", 
-                vmin=0, vmax=np.max(Ts[2]),origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap=sns.color_palette("magma", as_cmap=True))
+                vmin=0, vmax=np.max(Ts[2]),origin='lower',extent=[subjects[0],subjects[-1],trials[0],trials[-1]],interpolation="nearest",cmap="magma")
             
     cbar = plt.colorbar()           
     cbar.set_label('t-value', rotation=270)  
     # cbar.set_ticks([-1,0,1,2,3])
-    contours = plt.contour(subjects, trials, P, 8, colors='white',linewidths=1)
+    contours = plt.contour(subjects, trials, P, 4, colors='white',linewidths=1)
     plt.clabel(contours, inline=True, fontsize=10)
     if i == 0: plt.ylabel("erp decoding\nnumber of trials")
     plt.tick_params(left = False,bottom = False)
