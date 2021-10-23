@@ -1,6 +1,6 @@
 # reactivations
 
-Code to replicate figures in "Pinging the brain with visual impulses reveals electrically active, not activity-silent working memories", Joao Barbosa, Diego Lozano-Soldevilla & Albert Compte, Plos Biology (in press). [Click here for slighly outdated psyarxiv link.](https://psyarxiv.com/qv6fu/) 
+Code to replicate figures in ["Pinging the brain with visual impulses reveals electrically active, not activity-silent working memories", Joao Barbosa, Diego Lozano-Soldevilla & Albert Compte, Plos Biology (2021).](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001436) 
 
 IMPORTANT: We did not collect the data analyzed in this paper. Consider downloading and citing the original datasets from the original publications.
 
@@ -8,7 +8,7 @@ IMPORTANT: We did not collect the data analyzed in this paper. Consider download
 [Wolff et al 2017](https://www.nature.com/articles/nn.4546)
 
 
-Single-trial [decoding accuracies](https://www.dropbox.com/sh/ovfz5vun5el679v/AAC6lko741z_25zClPfrtJzja?dl=0) (used in Fig 2 and 3) and [Data](https://www.dropbox.com/sh/n80f49f37ql2cbv/AACEJat6V3YdEodForGvdjrwa?dl=0) (used in Fig 4) need to be downloaded separatedly for the scripts to run properly. 
+Single-trial [decoding accuracies](https://www.dropbox.com/sh/ovfz5vun5el679v/AAC6lko741z_25zClPfrtJzja?dl=0) (used in Fig 2 and 3) and [Data](https://www.dropbox.com/sh/7wxlbse6a4fnhqo/AABzb1Jqyq82NIVhNrj2Cvaba?dl=0) (used in Fig 4) need to be downloaded separatedly for the scripts to run properly. 
 
 If you need to use this slighly modified data (mostly concatenated), **you must cite the original studies anyway.**
 
