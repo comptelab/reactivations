@@ -1,6 +1,6 @@
 # reactivations
 
-Code to replicate figures in "Pinging the brain with visual impulses reveals electrically active, not activity-silent working memories", Joao Barbosa, Diego Lozano-Soldevilla & Albert Compte, Plos Biology (in press). [Click here for slighly outdated psyarxiv link.](https://psyarxiv.com/qv6fu/) 
+Code to replicate figures in ["Pinging the brain with visual impulses reveals electrically active, not activity-silent working memories", Joao Barbosa, Diego Lozano-Soldevilla & Albert Compte, Plos Biology (2021).](https://journals.plos.org/plosbiology/article?id=10.1371/journal.pbio.3001436) 
 
 IMPORTANT: We did not collect the data analyzed in this paper. Consider downloading and citing the original datasets from the original publications.
 
